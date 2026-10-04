@@ -19,19 +19,19 @@ pipeline {
                 script {
                     def scannerHome = tool 'SonarScanner'
 
-                withSonarQubeEnv('SonarQube') {
-                    sh """
-                        \${scannerHome}/bin/sonar-scanner \
-                        -Dsonar.projectKey=jenkins-sonarqube-docker \
-                        -Dsonar.sources=. \
-                        -Dsonar.tests=. \
-                        -Dsonar.test.inclusions=test_*.py \
-                        -Dsonar.exclusions=test_*.py
-                    """
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=jenkins-sonarqube-docker \
+                            -Dsonar.sources=. \
+                            -Dsonar.tests=. \
+                            -Dsonar.test.inclusions=test_*.py \
+                            -Dsonar.exclusions=test_*.py
+                        """
+                    }
                 }
             }
         }
-    }
 
         stage('Docker Build') {
             steps {
