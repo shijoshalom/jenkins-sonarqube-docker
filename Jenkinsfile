@@ -17,19 +17,21 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('SonarQube') {
-                        sh '''
-                            sonar-scanner \
-                              -Dsonar.projectKey=jenkins-sonarqube-docker \
-                              -Dsonar.sources=. \
-                              -Dsonar.tests=. \
-                              -Dsonar.test.inclusions=test_*.py \
-                              -Dsonar.exclusions=test_*.py
-                        '''
-                    }
+                    def scannerHome = tool 'SonarScanner'
+
+                withSonarQubeEnv('SonarQube') {
+                    sh """
+                        \${scannerHome}/bin/sonar-scanner \
+                        -Dsonar.projectKey=jenkins-sonarqube-docker \
+                        -Dsonar.sources=. \
+                        -Dsonar.tests=. \
+                        -Dsonar.test.inclusions=test_*.py \
+                        -Dsonar.exclusions=test_*.py
+                    """
                 }
             }
         }
+    }
 
         stage('Docker Build') {
             steps {
